@@ -1,0 +1,308 @@
+MATCH (n)
+WITH count(n) AS Nodes
+MATCH ()-[r]->()
+RETURN Nodes, count(r) AS Relationships;
+
+MATCH (s:Student)-[:ENROLLED_IN]->
+      (g:Course {title: 'Graph Analytics'}),
+      (s)-[:ENROLLED_IN]->(other:Course)
+WHERE other <> g
+RETURN s.name AS Student,
+       collect(DISTINCT other.title) AS OtherCourses;
+
+MATCH (s:Student)-[r:ENROLLED_IN]->
+      (c:Course {title: 'NoSQL Databases'})
+RETURN s.name AS Student,
+       s.semester AS CurrentSemester,
+       r.semesterEnrolled AS SemesterEnrolled,
+       r.grade AS Grade;
+
+MATCH (s:Student)-[r:ENROLLED_IN]->
+      (c:Course {title: 'NoSQL Databases'})
+RETURN s.name AS Student,
+       s.semester AS CurrentSemester,
+       r.semesterEnrolled AS SemesterEnrolled,
+       r.grade AS Grade;
+
+MATCH (d:Department {name: 'Information Technology'})
+      -[:OFFERS]->(c:Course)
+RETURN d.name AS Department, c.courseCode, c.title;
+
+MATCH (s:Student)-[:BELONGS_TO]->
+      (d:Department {name: 'Computer Science'})
+RETURN s.name AS Student, d.name AS Department;
+
+MATCH (s:Student)-[r:ENROLLED_IN]->
+      (c:Course {title: 'Graph Analytics'})
+RETURN s.name AS Student,
+       r.semesterEnrolled AS Semester,
+       r.grade AS Grade;
+
+MATCH (f:Faculty {name: 'Dr. Meera Sen'})
+      -[r:TEACHES]->(c:Course)
+RETURN f.name AS Faculty, c.title AS Course,
+       r.academicYear AS AcademicYear;
+
+MATCH (c:Course)
+WHERE c.credits > 3
+RETURN c.courseCode, c.title, c.credits;
+
+MATCH (s:Student)
+WHERE s.semester = 5
+RETURN s.studentId, s.name, s.semester, s.email;
+
+MATCH (a)-[r]->(b)
+RETURN
+  labels(a) AS SourceLabel,
+  type(r) AS Relationship,
+  labels(b) AS TargetLabel,
+  count(r) AS Total
+ORDER BY Relationship;
+
+MATCH (n)
+RETURN labels(n) AS NodeLabel, count(n) AS TotalNodes
+ORDER BY NodeLabel;
+
+MATCH (a)-[r]->(b)
+RETURN a, r, b;
+
+MATCH (s:Student)-[r]->(x)
+RETURN s, r, x;
+
+MATCH (d:Department), (c:Course)
+WHERE
+  (d.departmentId = 'D101'
+    AND c.courseCode IN ['CS302','CS303','CS305'])
+  OR
+  (d.departmentId = 'D102'
+    AND c.courseCode IN ['CS301','CS304'])
+CREATE (d)-[:OFFERS]->(c);
+
+MATCH (s:Student), (d:Department)
+WHERE
+  (s.studentId IN ['S101','S102','S103']
+    AND d.departmentId = 'D101')
+  OR
+  (s.studentId IN ['S104','S105']
+    AND d.departmentId = 'D102')
+CREATE (s)-[:BELONGS_TO]->(d);
+
+MATCH (f:Faculty), (c:Course)
+WHERE
+  (f.facultyId = 'F101' AND c.courseCode IN ['CS302','CS305'])
+  OR (f.facultyId = 'F102' AND c.courseCode IN ['CS301','CS303','CS304'])
+CREATE (f)-[:TEACHES {
+  academicYear: '2026-27'
+}]->(c);
+
+MATCH (s:Student), (c:Course)
+WHERE
+  (s.studentId = 'S101' AND c.courseCode IN ['CS301','CS302','CS305'])
+  OR (s.studentId = 'S102' AND c.courseCode IN ['CS301','CS303'])
+  OR (s.studentId = 'S103' AND c.courseCode IN ['CS302','CS304'])
+  OR (s.studentId = 'S104' AND c.courseCode IN ['CS303','CS305'])
+  OR (s.studentId = 'S105' AND c.courseCode IN ['CS301','CS304'])
+CREATE (s)-[:ENROLLED_IN {
+  semesterEnrolled: s.semester,
+  grade: 'Not Published'
+}]->(c);
+
+MATCH (n)
+RETURN labels(n) AS Labels, properties(n) AS Properties;
+
+CREATE
+  // Students
+  (s1:Student {
+    studentId: 'S101',
+    name: 'Aarav Sharma',
+    semester: 5,
+    email: 'aarav@univ.edu'
+  }),
+  (s2:Student {
+    studentId: 'S102',
+    name: 'Priya Das',
+    semester: 5,
+    email: 'priya@univ.edu'
+  }),
+  (s3:Student {
+    studentId: 'S103',
+    name: 'Rahul Verma',
+    semester: 3,
+    email: 'rahul@univ.edu'
+  }),
+  (s4:Student {
+    studentId: 'S104',
+    name: 'Sneha Roy',
+    semester: 3,
+    email: 'sneha@univ.edu'
+  }),
+  (s5:Student {
+    studentId: 'S105',
+    name: 'Arjun Patel',
+    semester: 5,
+    email: 'arjun@univ.edu'
+  }),
+
+  // Faculty
+  (f1:Faculty {
+    facultyId: 'F101',
+    name: 'Dr. Meera Sen',
+    designation: 'Associate Professor',
+    specialization: 'Database Systems'
+  }),
+  (f2:Faculty {
+    facultyId: 'F102',
+    name: 'Dr. Amit Roy',
+    designation: 'Assistant Professor',
+    specialization: 'Data Analytics'
+  }),
+
+  // Courses
+  (c1:Course {
+    courseCode: 'CS301',
+    title: 'Graph Analytics',
+    credits: 3,
+    level: 'Advanced'
+  }),
+  (c2:Course {
+    courseCode: 'CS302',
+    title: 'Database Management Systems',
+    credits: 4,
+    level: 'Core'
+  }),
+  (c3:Course {
+    courseCode: 'CS303',
+    title: 'Data Mining',
+    credits: 3,
+    level: 'Advanced'
+  }),
+  (c4:Course {
+    courseCode: 'CS304',
+    title: 'Big Data Analytics',
+    credits: 4,
+    level: 'Advanced'
+  }),
+  (c5:Course {
+    courseCode: 'CS305',
+    title: 'NoSQL Databases',
+    credits: 3,
+    level: 'Core'
+  }),
+
+  // Departments
+  (d1:Department {
+    departmentId: 'D101',
+    name: 'Computer Science',
+    building: 'Block A'
+  }),
+  (d2:Department {
+    departmentId: 'D102',
+    name: 'Information Technology',
+    building: 'Block B'
+  });
+
+MATCH (s:Student)-[r:PARTICIPATES_IN]->(a:Activity)
+RETURN s, r, a
+LIMIT 200;
+
+MATCH (s:Student)-[r:PARTICIPATES_IN]->(a:Activity)
+RETURN s, r, a
+LIMIT 300;
+
+MATCH (s:Student)
+WHERE s.community IS NOT NULL
+RETURN s.community AS Community,
+       count(s) AS Students
+ORDER BY Community;
+
+MATCH (s:Student)
+RETURN s.student_id AS Student,
+       s.community AS Community
+ORDER BY Community, Student
+LIMIT 20;
+
+MATCH (n:NetworkResilience)
+RETURN n;
+
+MATCH (n)
+RETURN DISTINCT labels(n) AS Label, keys(n) AS Properties;
+
+MATCH (n)
+RETURN labels(n) AS Label, keys(n) AS Properties
+LIMIT 20;
+
+MATCH (n)
+WHERE n.scenario IS NOT NULL
+RETURN labels(n) AS Label, keys(n) AS Properties
+LIMIT 1;
+
+MATCH (s:Student)
+RETURN s.student_id,
+       s.degree,
+       s.degree_centrality,
+       s.betweenness_centrality,
+       s.closeness_centrality,
+       s.community
+ORDER BY s.degree DESC
+LIMIT 10;
+
+LOAD CSV WITH HEADERS FROM 'file:///communities.csv' AS row
+MATCH (s:Student {student_id: row.student_id})
+SET s.community = toInteger(row.community)
+RETURN count(s) AS students_updated;
+
+LOAD CSV WITH HEADERS FROM 'file:///student_metrics.csv' AS row
+MATCH (s:Student {student_id: row.student_id})
+SET s.degree = toInteger(row.degree),
+    s.degree_centrality = toFloat(row.degree_centrality),
+    s.betweenness_centrality = toFloat(row.betweenness_centrality),
+    s.closeness_centrality = toFloat(row.closeness_centrality)
+RETURN count(s) AS students_updated;
+
+MATCH (s:Student)-[:PARTICIPATES_IN]->(a:Activity)
+RETURN s.student_id AS student,
+       s.department AS department,
+       count(a) AS activities
+ORDER BY activities DESC
+LIMIT 10;
+
+MATCH (s1:Student)-[:PARTICIPATES_IN]->(a:Activity)
+      <-[:PARTICIPATES_IN]-(s2:Student)
+WHERE s1.student_id < s2.student_id
+RETURN s1.student_id AS student1,
+       s2.student_id AS student2,
+       count(a) AS shared_activities
+ORDER BY shared_activities DESC
+LIMIT 10;
+
+MATCH (s:Student {student_id: "S026"})
+      -[:PARTICIPATES_IN]->(a:Activity)
+RETURN s.student_id AS student,
+       a.activity_name AS activity,
+       a.activity_type AS type;
+
+MATCH (s:Student)-[:PARTICIPATES_IN]->(a:Activity)
+RETURN a.activity_name AS activity,
+       count(s) AS participants
+ORDER BY participants DESC
+LIMIT 10;
+
+MATCH (s:Student)-[r:PARTICIPATES_IN]->(a:Activity)
+RETURN s, r, a
+LIMIT 50;
+
+MATCH ()-[r:PARTICIPATES_IN]->()
+RETURN count(r) AS participation_records;
+
+MATCH (a:Activity)
+RETURN count(a) AS activities;
+
+MATCH (s:Student)
+RETURN count(s) AS students;
+
+MATCH (n)
+RETURN count(n) AS total_nodes;
+
+RETURN "Student Activity Network is working!" AS message;
+
+:RETURN "Student Activity Network is working!" AS message;

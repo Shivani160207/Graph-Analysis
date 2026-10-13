@@ -1,0 +1,83 @@
+Labels,Properties
+[Student],"{
+  studentId: S101,
+  name: Aarav Sharma,
+  semester: 5,
+  email: aarav@univ.edu
+}"
+[Student],"{
+  studentId: S102,
+  name: Priya Das,
+  semester: 5,
+  email: priya@univ.edu
+}"
+[Student],"{
+  studentId: S103,
+  name: Rahul Verma,
+  semester: 3,
+  email: rahul@univ.edu
+}"
+[Student],"{
+  studentId: S104,
+  name: Sneha Roy,
+  semester: 3,
+  email: sneha@univ.edu
+}"
+[Student],"{
+  studentId: S105,
+  name: Arjun Patel,
+  semester: 5,
+  email: arjun@univ.edu
+}"
+[Faculty],"{
+  facultyId: F101,
+  name: Dr. Meera Sen,
+  specialization: Database Systems,
+  designation: Associate Professor
+}"
+[Faculty],"{
+  facultyId: F102,
+  name: Dr. Amit Roy,
+  specialization: Data Analytics,
+  designation: Assistant Professor
+}"
+[Course],"{
+  credits: 3,
+  level: Advanced,
+  courseCode: CS301,
+  title: Graph Analytics
+}"
+[Course],"{
+  credits: 4,
+  level: Core,
+  courseCode: CS302,
+  title: Database Management Systems
+}"
+[Course],"{
+  credits: 3,
+  level: Advanced,
+  courseCode: CS303,
+  title: Data Mining
+}"
+[Course],"{
+  credits: 4,
+  level: Advanced,
+  courseCode: CS304,
+  title: Big Data Analytics
+}"
+[Course],"{
+  credits: 3,
+  level: Core,
+  courseCode: CS305,
+  title: NoSQL Databases
+}"
+[Department],"{
+  departmentId: D101,
+  name: Computer Science,
+  building: Block A
+}"
+[Department],"{
+  departmentId: D102,
+  name: Information Technology,
+  building: Block B
+}"

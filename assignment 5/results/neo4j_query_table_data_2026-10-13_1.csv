@@ -1,0 +1,5 @@
+SourceLabel,Relationship,TargetLabel,Total
+[Student],BELONGS_TO,[Department],5
+[Student],ENROLLED_IN,[Course],11
+[Department],OFFERS,[Course],5
+[Faculty],TEACHES,[Course],5
